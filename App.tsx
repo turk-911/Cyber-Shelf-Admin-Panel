@@ -9,6 +9,8 @@ const App: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="SignupScreen" component={SignupScreen}/>
+        <Stack.Screen name="LoginScreen" component={LoginScreen}/>
         <Stack.Screen name="AddFile" component={AddFile} />
       </Stack.Navigator>
     </NavigationContainer>
