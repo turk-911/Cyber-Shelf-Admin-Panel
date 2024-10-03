@@ -1,39 +1,45 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Alert, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { Text, TextInput, StyleSheet, Alert, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import * as DocumentPicker from 'expo-document-picker'
 import CustomButton from "../components/CustomButton";
+import Toast from "react-native-root-toast";
 const AddFile: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<string>("1st");
   const [selectedBranch, setSelectedBranch] = useState<string>("IT");
   const [selectedSemester, setSelectedSemester] = useState<string>("1st");
-  const [subject, setSubject] = useState<string>("");
-  const [file, setFile] = useState<DocumentPickerResponse | null>(null);
+  const [subject, setSubject] = useState<string>("LAL");
   const [pdf, setPdf] = useState("");
-  const handleFilePick = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf],
-      });
-      setFile(result[0]);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        Alert.alert("Cancelled", "No file was selected");
-      } else {
-        Alert.alert("Error", "Failed to pick the file");
-      }
-    }
-  };
-
   const handleSubmit = () => {
-    if (!subject || !file) {
+    if (!subject || !pdf) {
       Alert.alert("Error", "Please fill in all fields and select a file");
       return;
     }
-    Alert.alert(
-      "Form Submitted",
-      `Year: ${selectedYear}\nBranch: ${selectedBranch}\nSemester: ${selectedSemester}\nSubject: ${subject}\nFile: ${file?.name}`
-    );
+    return Toast.show("Successfully uploaded link", {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.CENTER,
+      backgroundColor: 'green',
+      textColor: 'white',
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      opacity: 1,
+      containerStyle: {
+        padding: 15,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#033471',
+        backgroundColor: 'green',
+        marginHorizontal: 30,
+        elevation: 5,
+        width: '90%'
+      },
+      textStyle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center',
+      }
+    });
   };
 
   return (
@@ -88,7 +94,7 @@ const AddFile: React.FC = () => {
           style={styles.input}
           placeholder="Enter subject"
           value={subject}
-          onChangeText={setSubject}
+          onChange={() => setSubject(subject)}
         />
         <TextInput style={styles.input} placeholder="Paste a Google Drive link here" value={pdf} onChangeText={setPdf} />
         <CustomButton title="Submit" onPress={handleSubmit} color="#033471" />
@@ -103,34 +109,50 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
+    fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 30,
+    color: "#033471",
   },
   label: {
-    fontSize: 16,
-    marginVertical: 10,
+    fontSize: 18,
+    marginVertical: 12,
+    color: "#001632",
+    fontWeight: "600",
   },
   picker: {
     borderWidth: 1,
     borderColor: "#001632",
-    borderRadius: 5,
-    backgroundColor: "#fefefe",
-    marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: "#ffffff",
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   input: {
     width: "100%",
-    padding: 10,
+    padding: 15,
+    fontSize: 16,
     borderWidth: 1,
     borderColor: "#001632",
-    borderRadius: 5,
-    backgroundColor: "#fefefe",
+    borderRadius: 8,
+    backgroundColor: "#ffffff",
     marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   itemStyle: {
-    color: '#001632',
-    backgroundColor: '#fefefe'
-  }
+    color: "#001632",
+    backgroundColor: "#ffffff",
+  },
 });
-
 export default AddFile;
