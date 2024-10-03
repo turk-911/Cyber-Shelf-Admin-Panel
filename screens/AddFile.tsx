@@ -3,13 +3,13 @@ import { View, Text, TextInput, StyleSheet, Alert, ScrollView, KeyboardAvoidingV
 import { Picker } from "@react-native-picker/picker";
 import * as DocumentPicker from 'expo-document-picker'
 import CustomButton from "../components/CustomButton";
-import * as Haptics from 'expo-haptics'
 const AddFile: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<string>("1st");
   const [selectedBranch, setSelectedBranch] = useState<string>("IT");
   const [selectedSemester, setSelectedSemester] = useState<string>("1st");
   const [subject, setSubject] = useState<string>("");
   const [file, setFile] = useState<DocumentPickerResponse | null>(null);
+  const [pdf, setPdf] = useState("");
   const handleFilePick = async () => {
     try {
       const result = await DocumentPicker.pick({
@@ -36,21 +36,6 @@ const AddFile: React.FC = () => {
     );
   };
 
-  const handleChangeYear = (itemValue: string) => {
-    setSelectedYear(itemValue)
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-  }
-
-  const handleChangeBranch = (itemValue: string) => {
-    setSelectedBranch(itemValue)
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-  }
-
-  const handleChangeSem = (itemValue: string) => {
-    setSelectedSemester(itemValue)
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-  }
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -62,10 +47,9 @@ const AddFile: React.FC = () => {
         <Text style={styles.label}>Select Year</Text>
         <Picker
           selectedValue={selectedYear}
-          onValueChange={handleChangeYear}
+          onValueChange={(itemValue) => setSelectedYear(itemValue)}
           itemStyle={styles.itemStyle}
           style={styles.picker}
-          
         >
           <Picker.Item label="1st Year" value="1st" />
           <Picker.Item label="2nd Year" value="2nd" />
@@ -75,7 +59,7 @@ const AddFile: React.FC = () => {
         <Text style={styles.label}>Select Branch</Text>
         <Picker
           selectedValue={selectedBranch}
-          onValueChange={handleChangeBranch}
+          onValueChange={(itemValue) => setSelectedBranch(itemValue)}
           style={styles.picker}
           itemStyle={styles.itemStyle}
         >
@@ -86,7 +70,7 @@ const AddFile: React.FC = () => {
         <Text style={styles.label}>Select Semester</Text>
         <Picker
           selectedValue={selectedSemester}
-          onValueChange={handleChangeSem}
+          onValueChange={(itemValue) => setSelectedSemester(itemValue)}
           style={styles.picker}
           itemStyle={styles.itemStyle}
         >
@@ -106,11 +90,7 @@ const AddFile: React.FC = () => {
           value={subject}
           onChangeText={setSubject}
         />
-        <CustomButton
-          title="Select File"
-          onPress={handleFilePick}
-          color="#376fdf"
-        />
+        <TextInput style={styles.input} placeholder="Paste a Google Drive link here" value={pdf} onChangeText={setPdf} />
         <CustomButton title="Submit" onPress={handleSubmit} color="#033471" />
       </ScrollView>
     </KeyboardAvoidingView>
