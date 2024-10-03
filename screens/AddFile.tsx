@@ -9,6 +9,7 @@ const AddFile: React.FC = () => {
   const [selectedSemester, setSelectedSemester] = useState<string>("1st");
   const [subject, setSubject] = useState<string>("");
   const [file, setFile] = useState<DocumentPickerResponse | null>(null);
+  const [pdf, setPdf] = useState("");
   const handleFilePick = async () => {
     try {
       const result = await DocumentPicker.pick({
@@ -89,11 +90,7 @@ const AddFile: React.FC = () => {
           value={subject}
           onChangeText={setSubject}
         />
-        <CustomButton
-          title="Select File"
-          onPress={handleFilePick}
-          color="#376fdf"
-        />
+        <TextInput style={styles.input} placeholder="Paste a Google Drive link here" value={pdf} onChangeText={setPdf} />
         <CustomButton title="Submit" onPress={handleSubmit} color="#033471" />
       </ScrollView>
     </KeyboardAvoidingView>
