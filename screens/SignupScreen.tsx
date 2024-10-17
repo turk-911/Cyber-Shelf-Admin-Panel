@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
 import Button from "../components/CustomButton";
 import CustomButton from "../components/CustomButton";
-const SignupScreen: React.FC = () => {
+const SignupScreen: React.FC = ({ navigation }) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -12,6 +12,7 @@ const SignupScreen: React.FC = () => {
       return;
     }
     Alert.alert("Signup", `Username: ${username}\nPassword: ${password}`);
+    navigation.navigate("SeeFiles");
   };
 
   return (
@@ -38,6 +39,15 @@ const SignupScreen: React.FC = () => {
         secureTextEntry
       />
       <CustomButton title="Sign Up" onPress={handleSignup} color="#0376fd" />
+      <Text style={styles.signupText}>
+        Already have an account?{" "}
+        <Text
+          style={styles.signupLink}
+          onPress={() => navigation.navigate("Login")}
+        >
+          Login
+        </Text>
+      </Text>
     </View>
   );
 };
@@ -69,6 +79,14 @@ const styles = StyleSheet.create({
     marginTop: 1,
     color: "#fefefe",
     backgroundColor: "#0376fd",
+  },
+  signupText: {
+    marginTop: 10,
+    fontSize: 14,
+  },
+  signupLink: {
+    color: "#0376fd",
+    fontWeight: "bold",
   },
 });
 

@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
-import Button from "../components/CustomButton";
 import CustomButton from "../components/CustomButton";
-const LoginScreen: React.FC = () => {
+
+const LoginScreen: React.FC = ({ navigation }) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   const handleLogin = () => {
     if (username === "" || password === "") {
       Alert.alert("Error", "Please enter both username and password");
       return;
     }
     Alert.alert("Login", `Username: ${username}\nPassword: ${password}`);
+    navigation.navigate("SeeFiles");
   };
 
   return (
@@ -31,6 +33,15 @@ const LoginScreen: React.FC = () => {
         secureTextEntry
       />
       <CustomButton title="Login" onPress={handleLogin} color="#0376fd" />
+      <Text style={styles.signupText}>
+        Don't have an account?{" "}
+        <Text
+          style={styles.signupLink}
+          onPress={() => navigation.navigate("Signup")}
+        >
+          Signup
+        </Text>
+      </Text>
     </View>
   );
 };
@@ -56,13 +67,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#fff",
   },
-  button: {
-    width: "100%",
-    padding: 10,
-    marginTop: 1,
-    color: "#fefefe",
-    backgroundColor: "#0376fd",
-  }
+  signupText: {
+    marginTop: 10,
+    fontSize: 14,
+  },
+  signupLink: {
+    color: "#0376fd",
+    fontWeight: "bold",
+  },
 });
 
 export default LoginScreen;
