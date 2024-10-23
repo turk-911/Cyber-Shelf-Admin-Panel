@@ -13,6 +13,7 @@ const App: React.FC = () => {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="SeeFiles" component={UploadedFilesScreen} />
+        <Stack.Screen name="AddFile" component={AddFile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
