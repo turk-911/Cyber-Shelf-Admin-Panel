@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
 import Button from "../components/CustomButton";
 import CustomButton from "../components/CustomButton";
-const SignupScreen: React.FC = ({ navigation }) => {
+import { LoginScreenProps } from "../utils";
+const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");

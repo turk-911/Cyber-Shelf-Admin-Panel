@@ -6,8 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { LoginScreenProps } from "../utils";
 interface File {
   id: string;
   name: string;
@@ -19,7 +21,7 @@ const uploadedFiles: File[] = [
   { id: "3", name: "Presentation.pptx", type: "PowerPoint" },
   { id: "4", name: "Budget.xlsx", type: "Excel" },
 ];
-const UploadedFilesScreen: React.FC = ({ navigation }) => {
+const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const handleFilePress = (file: File) => {
     Alert.alert("File Selected", `You selected ${file.name}`);
   };
@@ -39,19 +41,21 @@ const UploadedFilesScreen: React.FC = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Uploaded Files</Text>
-      <FlatList
-        data={uploadedFiles}
-        keyExtractor={(item) => item.id}
-        renderItem={renderFileItem}
-        ListEmptyComponent={<Text>No files uploaded yet.</Text>}
-      />
-      {/* Floating Button to Add File */}
-      <TouchableOpacity style={styles.floatingButton} onPress={handleAddFile}>
-        <Icon name="add" size={30} color="#fff" />
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Uploaded Files</Text>
+        <FlatList
+          data={uploadedFiles}
+          keyExtractor={(item) => item.id}
+          renderItem={renderFileItem}
+          ListEmptyComponent={<Text>No files uploaded yet.</Text>}
+        />
+        {/* Floating Button to Add File */}
+        <TouchableOpacity style={styles.floatingButton} onPress={handleAddFile}>
+          <Icon name="add" size={30} color="#fff" />
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,48 +1,59 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView } from "react-native";
 import CustomButton from "../components/CustomButton";
+import axios from "axios";
+import { LoginScreenProps } from "../utils";
 
-const LoginScreen: React.FC = ({ navigation }) => {
-  const [username, setUsername] = useState<string>("");
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleLogin = () => {
-    if (username === "" || password === "") {
-      Alert.alert("Error", "Please enter both username and password");
+  const handleLogin = async () => {
+    if (email === "" || password === "") {
+      Alert.alert("Error", "Please enter both email and password");
       return;
     }
-    Alert.alert("Login", `Username: ${username}\nPassword: ${password}`);
-    navigation.navigate("SeeFiles");
+    try {
+      const response = await axios.post("http://localhost:5500/auth", { email, password });
+      const { token, user } = response.data;
+      Alert.alert("Login successful");
+      navigation.navigate("SeeFiles", { user });
+    } catch (error) {
+      console.error("Login error", error);
+      Alert.alert("Login failed", "Invalid email or password");
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <CustomButton title="Login" onPress={handleLogin} color="#0376fd" />
-      <Text style={styles.signupText}>
-        Don't have an account?{" "}
-        <Text
-          style={styles.signupLink}
-          onPress={() => navigation.navigate("Signup")}
-        >
-          Signup
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Login</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <CustomButton title="Login" onPress={handleLogin} color="#0376fd" />
+        <Text style={styles.signupText}>
+          Don't have an account?{" "}
+          <Text
+            style={styles.signupLink}
+            onPress={() => navigation.navigate("Signup")}
+          >
+            Signup
+          </Text>
         </Text>
-      </Text>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

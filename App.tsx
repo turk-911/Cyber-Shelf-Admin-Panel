@@ -10,10 +10,26 @@ const App: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="SeeFiles" component={UploadedFilesScreen} />
-        <Stack.Screen name="AddFile" component={AddFile} />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={SignupScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SeeFiles"
+          component={UploadedFilesScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddFile"
+          component={AddFile}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

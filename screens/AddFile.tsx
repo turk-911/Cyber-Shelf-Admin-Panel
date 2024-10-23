@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, Alert, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { Text, TextInput, StyleSheet, Alert, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import Toast from "react-native-root-toast";
@@ -43,63 +43,70 @@ const AddFile: React.FC = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-    >
-      <ScrollView>
-        <Text style={styles.title}>Add File</Text>
-        <Text style={styles.label}>Select Year</Text>
-        <Picker
-          selectedValue={selectedYear}
-          onValueChange={(itemValue) => setSelectedYear(itemValue)}
-          itemStyle={styles.itemStyle}
-          style={styles.picker}
-        >
-          <Picker.Item label="1st Year" value="1st" />
-          <Picker.Item label="2nd Year" value="2nd" />
-          <Picker.Item label="3rd Year" value="3rd" />
-          <Picker.Item label="4th Year" value="4th" />
-        </Picker>
-        <Text style={styles.label}>Select Branch</Text>
-        <Picker
-          selectedValue={selectedBranch}
-          onValueChange={(itemValue) => setSelectedBranch(itemValue)}
-          style={styles.picker}
-          itemStyle={styles.itemStyle}
-        >
-          <Picker.Item label="IT" value="IT" />
-          <Picker.Item label="IT-BIn" value="IT-BIn" />
-          <Picker.Item label="ECE" value="ECE" />
-        </Picker>
-        <Text style={styles.label}>Select Semester</Text>
-        <Picker
-          selectedValue={selectedSemester}
-          onValueChange={(itemValue) => setSelectedSemester(itemValue)}
-          style={styles.picker}
-          itemStyle={styles.itemStyle}
-        >
-          <Picker.Item label="1st Semester" value="1st" />
-          <Picker.Item label="2nd Semester" value="2nd" />
-          <Picker.Item label="3rd Semester" value="3rd" />
-          <Picker.Item label="4th Semester" value="4th" />
-          <Picker.Item label="5th Semester" value="5th" />
-          <Picker.Item label="6th Semester" value="6th" />
-          <Picker.Item label="7th Semester" value="7th" />
-          <Picker.Item label="8th Semester" value="8th" />
-        </Picker>
-        <Text style={styles.label}>Subject</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter subject"
-          value={subject}
-          onChange={() => setSubject(subject)}
-        />
-        <TextInput style={styles.input} placeholder="Paste a Google Drive link here" value={pdf} onChangeText={setPdf} />
-        <CustomButton title="Submit" onPress={handleSubmit} color="#033471" />
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      >
+        <ScrollView>
+          <Text style={styles.title}>Add File</Text>
+          <Text style={styles.label}>Select Year</Text>
+          <Picker
+            selectedValue={selectedYear}
+            onValueChange={(itemValue) => setSelectedYear(itemValue)}
+            itemStyle={styles.itemStyle}
+            style={styles.picker}
+          >
+            <Picker.Item label="1st Year" value="1st" />
+            <Picker.Item label="2nd Year" value="2nd" />
+            <Picker.Item label="3rd Year" value="3rd" />
+            <Picker.Item label="4th Year" value="4th" />
+          </Picker>
+          <Text style={styles.label}>Select Branch</Text>
+          <Picker
+            selectedValue={selectedBranch}
+            onValueChange={(itemValue) => setSelectedBranch(itemValue)}
+            style={styles.picker}
+            itemStyle={styles.itemStyle}
+          >
+            <Picker.Item label="IT" value="IT" />
+            <Picker.Item label="IT-BIn" value="IT-BIn" />
+            <Picker.Item label="ECE" value="ECE" />
+          </Picker>
+          <Text style={styles.label}>Select Semester</Text>
+          <Picker
+            selectedValue={selectedSemester}
+            onValueChange={(itemValue) => setSelectedSemester(itemValue)}
+            style={styles.picker}
+            itemStyle={styles.itemStyle}
+          >
+            <Picker.Item label="1st Semester" value="1st" />
+            <Picker.Item label="2nd Semester" value="2nd" />
+            <Picker.Item label="3rd Semester" value="3rd" />
+            <Picker.Item label="4th Semester" value="4th" />
+            <Picker.Item label="5th Semester" value="5th" />
+            <Picker.Item label="6th Semester" value="6th" />
+            <Picker.Item label="7th Semester" value="7th" />
+            <Picker.Item label="8th Semester" value="8th" />
+          </Picker>
+          <Text style={styles.label}>Subject</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter subject"
+            value={subject}
+            onChange={() => setSubject(subject)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Paste a Google Drive link here"
+            value={pdf}
+            onChangeText={setPdf}
+          />
+          <CustomButton title="Submit" onPress={handleSubmit} color="#033471" />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({
