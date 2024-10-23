@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/User";
 import { createError } from "../utils/error";
 dotenv.config();
-export const register = async (req: Request, res: Response, next: NextFunction) => {
+export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { name, email, password } = req.body;
         const existingUser = await User.findOne({ email }).exec();
@@ -20,12 +20,13 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET as string, {
             expiresIn: "30d",
         });
-        return res.status(200).json({ token, user });
+        res.status(200).json({ token, user });
+        return;
     } catch (error) {
         return next(error);
     }
 }
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email }).exec();
@@ -35,7 +36,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, {
             expiresIn: "9999 years",
         });
-        return res.status(200).json({ token, user });
+        res.status(200).json({ token, user });
+        return;
     } catch (error) {
         return next(error);
     }

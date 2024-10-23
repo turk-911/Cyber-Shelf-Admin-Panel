@@ -18,3 +18,4 @@ const uploadSchema = new mongoose.Schema({
     }
 });
 const Upload = mongoose.model("Upload", uploadSchema);
+export default Upload;
