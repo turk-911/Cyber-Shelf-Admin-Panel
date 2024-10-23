@@ -3,17 +3,25 @@ import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
 import Button from "../components/CustomButton";
 import CustomButton from "../components/CustomButton";
 import { LoginScreenProps } from "../utils";
+import axios from "axios";
 const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (username === "" || password === "") {
       Alert.alert("Error", "Please enter both username and password");
       return;
     }
-    Alert.alert("Signup", `Username: ${username}\nPassword: ${password}`);
-    navigation.navigate("SeeFiles");
+    try {
+      const response = await axios.post("http://localhost:5500/auth", { username, email, password });
+      const { token, user } = response.data;
+      Alert.alert("Signup successful");
+      navigation.navigate("AddFile", { user });
+    } catch (error) {
+      console.error("Signup error", error);
+      Alert.alert("Signup error");
+    }
   };
 
   return (

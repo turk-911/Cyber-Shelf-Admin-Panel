@@ -3,7 +3,6 @@ import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView } from "react-na
 import CustomButton from "../components/CustomButton";
 import axios from "axios";
 import { LoginScreenProps } from "../utils";
-
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");

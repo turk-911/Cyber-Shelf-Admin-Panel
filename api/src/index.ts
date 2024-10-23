@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import authRouter from "./routes/authRoutes";
 import bodyParser from "body-parser";
 import { connectDB } from "./config/db";
