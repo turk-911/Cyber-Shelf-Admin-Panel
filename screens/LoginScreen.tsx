@@ -13,7 +13,10 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:5500/auth", { email, password });
+      const response = await axios.post("http://192.168.1.4:5500/auth/register", {
+        email,
+        password,
+      });
       const { token, user } = response.data;
       Alert.alert("Login successful");
       navigation.navigate("SeeFiles", { user });

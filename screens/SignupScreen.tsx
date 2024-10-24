@@ -5,16 +5,21 @@ import CustomButton from "../components/CustomButton";
 import { LoginScreenProps } from "../utils";
 import axios from "axios";
 const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
-  const [username, setUsername] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const handleSignup = async () => {
-    if (username === "" || password === "") {
-      Alert.alert("Error", "Please enter both username and password");
+    if (name === "" || password === "") {
+      Alert.alert("Error", "Please enter both name and password");
       return;
     }
     try {
-      const response = await axios.post("http://localhost:5500/auth", { username, email, password });
+      const response = await axios.post("http://192.168.1.4:5500/auth/register", {
+        name,
+        email,
+        password,
+      });
+      console.log(response);
       const { token, user } = response.data;
       Alert.alert("Signup successful");
       navigation.navigate("AddFile", { user });
@@ -29,9 +34,9 @@ const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="name"
+        value={name}
+        onChangeText={setName}
         autoCapitalize="none"
       />
       <TextInput

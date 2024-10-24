@@ -7,12 +7,14 @@ import { connectDB } from "./config/db";
 dotenv.config();
 connectDB();
 const app = express();
+app.use(cors());
+app.use(express.json());
 const port = process.env.PORT || 5500;
 app.use(bodyParser.json());
 app.use("/auth", authRouter);
 app.get("/", (req: Request, res: Response) => {
     res.send("Hello world");
 });
-app.listen(port, () => {
+app.listen(5500, '0.0.0.0', () => {
     console.log(`App listening on ${port}`);
 })
