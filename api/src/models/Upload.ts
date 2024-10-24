@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 const uploadSchema = new mongoose.Schema({
     driveLink: {
         type: String,
@@ -15,7 +15,12 @@ const uploadSchema = new mongoose.Schema({
     subject: {
         type: String,
         required: true,
-    }
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
 });
 const Upload = mongoose.model("Upload", uploadSchema);
 export default Upload;

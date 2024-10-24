@@ -1,25 +1,22 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import Upload from "../models/Upload";
 import { createError } from "../utils/error";
-export const addFile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+import { AuthenticatedRequest } from "../utils/utils";
+export const uploadFile = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         const { driveLink, semester, year, subject } = req.body;
-        const newUpload = new Upload({ driveLink, semester, year, subject });
-        const savedUpload = await newUpload.save();
-        res.status(201).json(savedUpload);
-        return;
+        if(!req.user) return next(createError(401, "User not authenticated"));
+        const upload = new Upload({
+            driveLink,
+            semester,
+            year,
+            subject,
+        });
+        const savedUpload = await upload.save();
+        req.user.uploads.push(savedUpload._id);
+        await req.user.save();
+        res.status(201).json({ message: "Upload successful", upload: upload });
     } catch (error) {
-        return next(error);
-    }
-}
-export const deleteFile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const { id } = req.params;
-        const deletedUpload = await Upload.findByIdAndDelete(id);
-        if(!deletedUpload) return next(createError(404, "File not found"));
-        res.status(200).json({ message: "File deleted successfully" });
-        return;
-    } catch (error) {
-        return next(error);
+        next(error);
     }
 }

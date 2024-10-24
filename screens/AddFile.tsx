@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, Alert, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
+import {
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import Toast from "react-native-root-toast";
@@ -9,37 +18,60 @@ const AddFile: React.FC = () => {
   const [selectedSemester, setSelectedSemester] = useState<string>("1st");
   const [subject, setSubject] = useState<string>("LAL");
   const [pdf, setPdf] = useState("");
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!subject || !pdf) {
       Alert.alert("Error", "Please fill in all fields and select a file");
       return;
     }
-    return Toast.show("Successfully uploaded link", {
-      duration: Toast.durations.LONG,
-      position: Toast.positions.CENTER,
-      backgroundColor: 'green',
-      textColor: 'white',
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      opacity: 1,
-      containerStyle: {
-        padding: 15,
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#033471',
-        backgroundColor: 'green',
-        marginHorizontal: 30,
-        elevation: 5,
-        width: '90%'
-      },
-      textStyle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-        textAlign: 'center',
+    try {
+      const token = "121212";
+      const response = await fetch("http://localhost:5500/uploads/add", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          driveLink: pdf,
+          semester: selectedSemester,
+          year: parseInt(selectedYear[0]),
+          branch: selectedBranch,
+          subject,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        Toast.show("Successfully uploaded!", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.CENTER,
+          backgroundColor: "green",
+          textColor: "white",
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          containerStyle: {
+            padding: 15,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: "#033471",
+            marginHorizontal: 30,
+            elevation: 5,
+            width: "90%",
+          },
+          textStyle: {
+            fontSize: 16,
+            fontWeight: "bold",
+            textAlign: "center",
+          },
+        });
+      } else {
+        Alert.alert("Error", data.message || "Upload failed");
       }
-    });
+    } catch (error) {
+      console.error("Upload error", error);
+      Alert.alert("Error", "Something went wrong. Please try again");
+    }
   };
 
   return (

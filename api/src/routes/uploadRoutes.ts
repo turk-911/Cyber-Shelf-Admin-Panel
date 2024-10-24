@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { addFile, deleteFile } from "../controllers/uploadController";
+import { uploadFile } from "../controllers/uploadController";
+import { verifyToken } from "../middleware/verifyToken";
 const router = Router();
-router.post("/add", addFile);
-router.delete("/delete/:id", deleteFile);
+router.post("/add", verifyToken, uploadFile);
 export default router;
