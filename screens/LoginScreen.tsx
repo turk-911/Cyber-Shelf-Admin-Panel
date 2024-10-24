@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, Alert, SafeAreaView } from "react-na
 import CustomButton from "../components/CustomButton";
 import axios from "axios";
 import { LoginScreenProps } from "../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -13,11 +14,17 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       return;
     }
     try {
-      const response = await axios.post("http://192.168.1.4:5500/auth/register", {
-        email,
-        password,
-      });
-      const { token, user } = response.data;
+      const response = await axios.post(
+        "http://192.168.29.41:5500/auth/login",
+        {
+          email,
+          password,
+        }
+      );
+      const { token, user, userEmail } = response.data;
+      console.log("User email: ", userEmail);
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("userEmail", userEmail);
       Alert.alert("Login successful");
       navigation.navigate("SeeFiles", { user });
     } catch (error) {

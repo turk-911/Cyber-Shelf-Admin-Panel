@@ -5,21 +5,19 @@ const uploadSchema = new mongoose.Schema({
         required: true,
     },
     semester: {
-        type: Number,
+        type: String,
         required: true,
     },
     year: {
-        type: Number,
+        type: String,
         required: true,
     },
     subject: {
         type: String,
         required: true,
     },
-    userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
+    userEmail: {
+        type: String,
     },
 });
 const Upload = mongoose.model("Upload", uploadSchema);

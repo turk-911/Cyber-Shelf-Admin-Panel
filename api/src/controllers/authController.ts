@@ -21,7 +21,9 @@ export const register = async (req: Request, res: Response, next: NextFunction):
         const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET as string, {
             expiresIn: "30d",
         });
-        res.status(200).json({ token, user });
+        const userEmail = createdUser.email;
+        console.log(userEmail);
+        res.status(200).json({ token, user, userEmail });
         return;
     } catch (error) {
         return next(error);
@@ -31,13 +33,16 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email }).exec();
+        
         if(!user) return next(createError(404, "User not found"));
         const isPasswordCorrect = bcrypt.compareSync(password, user.password);
         if(!isPasswordCorrect) return next(createError(403, "Incorrect password"));
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, {
             expiresIn: "9999 years",
         });
-        res.status(200).json({ token, user });
+        const userEmail = user.email;
+        res.status(200).json({ token, user, userEmail });
+        console.log(userEmail);
         return;
     } catch (error) {
         return next(error);

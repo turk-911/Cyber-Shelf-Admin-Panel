@@ -12,6 +12,7 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import Toast from "react-native-root-toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const AddFile: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<string>("1st");
   const [selectedBranch, setSelectedBranch] = useState<string>("IT");
@@ -24,8 +25,10 @@ const AddFile: React.FC = () => {
       return;
     }
     try {
-      const token = "121212";
-      const response = await fetch("http://localhost:5500/uploads/add", {
+      const token = await AsyncStorage.getItem("token");
+      const userEmail = await AsyncStorage.getItem("userEmail");
+      console.log(token);
+      const response = await fetch("http://192.168.29.41:5500/uploads/add", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -37,10 +40,12 @@ const AddFile: React.FC = () => {
           year: parseInt(selectedYear[0]),
           branch: selectedBranch,
           subject,
+          userEmail: userEmail
         }),
       });
-      const data = await response.json();
-      if (response.ok) {
+      const contentType = response.headers.get("content-type");
+      if(contentType && contentType.includes("application/json")) {
+        const data = await response.json();
         Toast.show("Successfully uploaded!", {
           duration: Toast.durations.LONG,
           position: Toast.positions.CENTER,
@@ -65,8 +70,11 @@ const AddFile: React.FC = () => {
             textAlign: "center",
           },
         });
-      } else {
-        Alert.alert("Error", data.message || "Upload failed");
+      }
+      else {
+        const text = await response.text();
+        console.log("Response text: ", text);
+        Alert.alert("Upload failed");
       }
     } catch (error) {
       console.error("Upload error", error);

@@ -4,6 +4,7 @@ import Button from "../components/CustomButton";
 import CustomButton from "../components/CustomButton";
 import { LoginScreenProps } from "../utils";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [name, setName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -14,13 +15,14 @@ const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       return;
     }
     try {
-      const response = await axios.post("http://192.168.1.4:5500/auth/register", {
+      const response = await axios.post("http://192.168.29.41:5500/auth/register", {
         name,
         email,
         password,
       });
       console.log(response);
       const { token, user } = response.data;
+      await AsyncStorage.setItem("token", token);
       Alert.alert("Signup successful");
       navigation.navigate("AddFile", { user });
     } catch (error) {
