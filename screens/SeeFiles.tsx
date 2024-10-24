@@ -50,7 +50,6 @@ const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           renderItem={renderFileItem}
           ListEmptyComponent={<Text>No files uploaded yet.</Text>}
         />
-        {/* Floating Button to Add File */}
         <TouchableOpacity style={styles.floatingButton} onPress={handleAddFile}>
           <Icon name="add" size={30} color="#fff" />
         </TouchableOpacity>
