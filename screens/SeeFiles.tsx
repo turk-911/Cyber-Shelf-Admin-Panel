@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,45 +7,61 @@ import {
   TouchableOpacity,
   Alert,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { LoginScreenProps } from "../utils";
-interface File {
-  id: string;
-  name: string;
-  type: string;
-}
-const uploadedFiles: File[] = [
-  { id: "1", name: "ProjectProposal.pdf", type: "PDF" },
-  { id: "2", name: "ProfilePic.png", type: "Image" },
-  { id: "3", name: "Presentation.pptx", type: "PowerPoint" },
-  { id: "4", name: "Budget.xlsx", type: "Excel" },
-];
+import { File } from "../utils";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+  const [files, setFiles] = useState<Array<File>>([]);
+  const [loading, setLoading] = useState(true);
+  const userEmail = AsyncStorage.getItem("userEmail");
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const response = await axios.get(
+          `http://192.168.1.6:5500/uploads/${userEmail}`
+        );
+        setFiles(response.data.uploadedFiles);
+      } catch (error) {
+        console.error("Error fetching files", error);
+        Alert.alert("Error", "Unable to fetch files");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFiles();
+  }, [userEmail]);
   const handleFilePress = (file: File) => {
     Alert.alert("File Selected", `You selected ${file.name}`);
   };
-
   const renderFileItem = ({ item }: { item: File }) => (
     <TouchableOpacity
       style={styles.fileItem}
       onPress={() => handleFilePress(item)}
     >
       <Text style={styles.fileName}>{item.name}</Text>
-      <Text style={styles.fileType}>{item.type}</Text>
     </TouchableOpacity>
   );
-
   const handleAddFile = () => {
     navigation.navigate("AddFile");
   };
-
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#0376fd" />
+        <Text>Loading files...</Text>
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Text style={styles.title}>Uploaded Files</Text>
         <FlatList
-          data={uploadedFiles}
+          data={files}
           keyExtractor={(item) => item.id}
           renderItem={renderFileItem}
           ListEmptyComponent={<Text>No files uploaded yet.</Text>}
@@ -105,6 +121,11 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 5,
+  },
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

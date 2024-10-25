@@ -15,11 +15,14 @@ const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       return;
     }
     try {
-      const response = await axios.post("http://192.168.29.41:5500/auth/register", {
-        name,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://192.168.1.6:5500/auth/register",
+        {
+          name,
+          email,
+          password,
+        }
+      );
       console.log(response);
       const { token, user } = response.data;
       await AsyncStorage.setItem("token", token);
