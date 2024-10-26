@@ -1,20 +1,34 @@
 import { NavigationProp, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+export type RootStackParamList = {
+    Login: undefined;
+    Signup: undefined;
+    OTP: { email: string };
+    SeeFiles: { user: any };
+    AddFile: { user: any };
+};
+export type OTPScreenRouteProp = RouteProp<RootStackParamList, "OTP">;
+export type OTPScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "OTP">;
+export interface OTPScreenProps {
+    route: OTPScreenRouteProp;
+    navigation: OTPScreenNavigationProp;
+}
 export interface LoginScreenProps {
     navigation: NavigationProp<any>;
     route: RouteProp<any>;
 }
 export interface File {
-    _id: String;
-    driveLink: String;
-    name: String;
-    semester: String;
-    year: String;
-    subject: String;
+    _id: string; 
+    driveLink: string;
+    name: string;
+    semester: string;
+    year: string;
+    subject: string;
 }
 export interface FileCardProps {
-    driveLink: String;
-    semester: String;
-    year: String;
-    subject: String;
+    driveLink: string;
+    semester: string;
+    year: string;
+    subject: string;
     _id: string;
 }

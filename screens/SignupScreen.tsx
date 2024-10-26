@@ -11,26 +11,29 @@ const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const handleSignup = async () => {
-    if (name === "" || password === "") {
-      Alert.alert("Error", "Please enter both name and password");
+    if(name === "" || password === "" || email === "") {
+      Alert.alert("Error", "Please fill in all fields");
       return;
     }
     try {
       const response = await axios.post(`${BASE_URL}auth/register`, {
-        name,
-        email,
+        name, 
+        email, 
         password,
       });
-      console.log(response);
-      const { token, user } = response.data;
-      await AsyncStorage.setItem("token", token);
-      Alert.alert("Signup successful");
-      navigation.navigate("AddFile", { user });
+      if(response.status === 200) {
+        Alert.alert("OTP Sent", "Please check your email for verification");
+        const userPassword = password;
+        const username = name;
+        AsyncStorage.setItem("userPassword", userPassword);
+        AsyncStorage.setItem("username", username);
+        navigation.navigate("OTP", { email });
+      }
     } catch (error) {
       console.error("Signup error", error);
-      Alert.alert("Signup error");
+      Alert.alert("Signup failed", "Could not complete registration");
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
