@@ -4,7 +4,17 @@ export interface LoginScreenProps {
     route: RouteProp<any>;
 }
 export interface File {
-    id: String;
+    _id: String;
     driveLink: String;
     name: String;
+    semester: String;
+    year: String;
+    subject: String;
+}
+export interface FileCardProps {
+    driveLink: String;
+    semester: String;
+    year: String;
+    subject: String;
+    _id: string;
 }

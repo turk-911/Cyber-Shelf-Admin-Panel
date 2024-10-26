@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  FlatList,
   StyleSheet,
   TouchableOpacity,
   Alert,
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
+import FileCard from "../components/Card";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { LoginScreenProps } from "../utils";
 import { File } from "../utils";
@@ -68,14 +68,15 @@ const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Text style={styles.title}>Uploaded Files</Text>
-        <FlatList
-          data={files}
-          keyExtractor={(item) =>
-            item.id ? item.id.toString() : Math.random().toString()
-          }
-          renderItem={renderFileItem}
-          ListEmptyComponent={<Text>No files uploaded yet.</Text>}
-        />
+        {files.map((file) => (
+          <FileCard
+            key={file._id.toString()}
+            driveLink={file.driveLink}
+            semester={file.semester}
+            subject={file.subject}
+            year={file.year}
+          />
+        ))}
         <TouchableOpacity style={styles.floatingButton} onPress={handleAddFile}>
           <Icon name="add" size={30} color="#fff" />
         </TouchableOpacity>
