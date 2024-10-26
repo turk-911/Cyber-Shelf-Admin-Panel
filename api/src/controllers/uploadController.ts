@@ -23,7 +23,8 @@ export const uploadFile = async (req: AuthenticatedRequest, res: Response, next:
 }
 export const getAllFiles = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        const { userEmail } = req.params;
+        const userEmail = req.params.email;
+        console.log("Fetching files for: ", userEmail);
         if (!userEmail) return next(createError(400, "Not authorized"));
         const uploadedFiles = await Upload.find({ userEmail: userEmail }).exec();
         if (!uploadedFiles) res.status(201).json({ message: "Returning an empty array", data: [] });

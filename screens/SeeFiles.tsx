@@ -14,17 +14,25 @@ import { LoginScreenProps } from "../utils";
 import { File } from "../utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { BASE_URL } from "../utils/ip";
 const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [files, setFiles] = useState<Array<File>>([]);
   const [loading, setLoading] = useState(true);
-  const userEmail = AsyncStorage.getItem("userEmail");
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const response = await axios.get(
-          `http://192.168.1.6:5500/uploads/${userEmail}`
-        );
+        const token = await AsyncStorage.getItem("token");
+        const userEmail = await AsyncStorage.getItem("userEmail");
+        console.log("Email found in local storage from SeeFiles.tsx 25 ->", userEmail);
+        if(!userEmail) console.log("No email found in local storage");
+        const response = await axios.get(`${BASE_URL}uploads/get-all-files/${userEmail}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        console.log(`${BASE_URL}uploads/get-all-files/${userEmail}`);
         setFiles(response.data.uploadedFiles);
+        console.log(response.data.uploadedFiles);
       } catch (error) {
         console.error("Error fetching files", error);
         Alert.alert("Error", "Unable to fetch files");
@@ -33,7 +41,7 @@ const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       }
     };
     fetchFiles();
-  }, [userEmail]);
+  }, []);
   const handleFilePress = (file: File) => {
     Alert.alert("File Selected", `You selected ${file.name}`);
   };
@@ -62,7 +70,9 @@ const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         <Text style={styles.title}>Uploaded Files</Text>
         <FlatList
           data={files}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) =>
+            item.id ? item.id.toString() : Math.random().toString()
+          }
           renderItem={renderFileItem}
           ListEmptyComponent={<Text>No files uploaded yet.</Text>}
         />

@@ -13,6 +13,7 @@ import { Picker } from "@react-native-picker/picker";
 import CustomButton from "../components/CustomButton";
 import Toast from "react-native-root-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BASE_URL } from "../utils/ip";
 const AddFile: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<string>("1st");
   const [selectedBranch, setSelectedBranch] = useState<string>("IT");
@@ -28,7 +29,7 @@ const AddFile: React.FC = () => {
       const token = await AsyncStorage.getItem("token");
       const userEmail = await AsyncStorage.getItem("userEmail");
       console.log(token);
-      const response = await fetch("http://192.168.29.41:5500/uploads/add", {
+      const response = await fetch(`${BASE_URL}uploads/add`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
