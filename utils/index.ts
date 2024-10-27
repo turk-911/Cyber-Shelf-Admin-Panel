@@ -4,8 +4,9 @@ export type RootStackParamList = {
     Login: undefined;
     Signup: undefined;
     OTP: { email: string };
-    SeeFiles: { user: any };
+    SeeFiles: { user: { name: string | null; email: string | null; profilePic: string } };
     AddFile: { user: any };
+    Profile: undefined;
 };
 export type OTPScreenRouteProp = RouteProp<RootStackParamList, "OTP">;
 export type OTPScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "OTP">;

@@ -6,6 +6,7 @@ import SignupScreen from "./screens/SignupScreen";
 import AddFile from "./screens/AddFile";
 import UploadedFilesScreen from "./screens/SeeFiles";
 import OTP from "./screens/OTP";
+import ProfileScreen from "./screens/ProfileScreen";
 const Stack = createNativeStackNavigator();
 const App: React.FC = () => {
   return (
@@ -37,6 +38,11 @@ const App: React.FC = () => {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
     </NavigationContainer>
   );
 };

@@ -7,19 +7,22 @@ import {
   TouchableOpacity,
   Alert,
   SafeAreaView,
+  Button,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native"; 
 const ProfileScreen: React.FC = () => {
-  const [name, setName] = useState<string | null>("");
-  const [email, setEmail] = useState<string | null>("");
+  const [name, setName] = useState<string>("John Doe");
+  const [email, setEmail] = useState<string>("someone@example.com");
   const [profilePic, setProfilePic] = useState<string>(
-    "https://placekitten.com/200/200" 
+    "https://placekitten.com/200/200"
   );
+  const navigation = useNavigation(); 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const storedName = await AsyncStorage.getItem("userName");
+        const storedName = await AsyncStorage.getItem("username");
         const storedEmail = await AsyncStorage.getItem("userEmail");
         const storedProfilePic = await AsyncStorage.getItem("profilePic");
         if (storedName) setName(storedName);
@@ -33,6 +36,10 @@ const ProfileScreen: React.FC = () => {
   }, []);
   const handleEditProfile = () => {
     Alert.alert("Edit Profile", "This feature is coming soon!");
+  };
+  const handleViewUploads = () => {
+    const user = { name, email, profilePic };
+    navigation.navigate("SeeFiles", user); 
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -49,6 +56,7 @@ const ProfileScreen: React.FC = () => {
         <Text style={styles.label}>Email</Text>
         <Text style={styles.value}>{email || "example@mail.com"}</Text>
       </View>
+      <Button title="View Uploads" onPress={handleViewUploads} />{" "}
     </SafeAreaView>
   );
 };
