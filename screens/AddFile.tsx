@@ -136,7 +136,7 @@ const AddFile: React.FC = () => {
             style={styles.input}
             placeholder="Enter subject"
             value={subject}
-            onChange={() => setSubject(subject)}
+            onChangeText={setSubject}
           />
           <TextInput
             style={styles.input}

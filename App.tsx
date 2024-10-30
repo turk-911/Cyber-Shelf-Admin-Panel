@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import AddFile from "./screens/AddFile";
-import UploadedFilesScreen from "./screens/SeeFiles";
+import UploadedFilesScreen from "./screens/HomeScreen";
 import OTP from "./screens/OTP";
 import ProfileScreen from "./screens/ProfileScreen";
 const Stack = createNativeStackNavigator();
@@ -33,16 +33,21 @@ const App: React.FC = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="Home"
+          component={UploadedFilesScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="AddFile"
           component={AddFile}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
-      <Stack.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ headerShown: false }}
-      />
     </NavigationContainer>
   );
 };
