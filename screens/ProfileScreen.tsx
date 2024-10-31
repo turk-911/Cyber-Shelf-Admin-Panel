@@ -10,9 +10,12 @@ import {
   ScrollView,
   Button,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import { BASE_URL } from "../utils/ip";
 
 const ProfileScreen: React.FC = () => {
   const [name, setName] = useState<string>("John Doe");
@@ -40,8 +43,37 @@ const ProfileScreen: React.FC = () => {
     fetchUserData();
   }, []);
 
-  const handleEditProfile = () => {
-    Alert.alert("Edit Profile", "This feature is coming soon!");
+  const handleEditProfile = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if(!permissionResult.granted) {
+      Alert.alert("Permission required", "Please grant access to photos.");
+      return;
+    }
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if(!pickerResult.canceled) {
+      const newProfilePic = pickerResult.assets[0].uri;
+      setProfilePic(newProfilePic);
+      try {
+        const token = await AsyncStorage.getItem("token");
+        const storedEmail = await AsyncStorage.getItem("userEmail");
+        const response = await axios.put(`${BASE_URL}profile/update-profile-pic`, 
+          { email: storedEmail, profilePic: newProfilePic },
+          { headers: { Authorization: `Bearer ${token}` }},
+        );
+        if(response.status === 200) {
+          Alert.alert("Success", "Profile picture updated successfully");
+          await AsyncStorage.setItem("profilePic", newProfilePic);
+        }
+      } catch (error) {
+        console.error("Error updating profile picture", error);
+        Alert.alert("Error", "Could not update profile picture");
+      }
+    }
   };
 
   const handleViewUploads = () => {
