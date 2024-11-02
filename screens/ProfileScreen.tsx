@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ScrollView,
   Button,
+  RefreshControl,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,29 +24,47 @@ const ProfileScreen: React.FC = () => {
   const [profilePic, setProfilePic] = useState<string>(
     "https://placekitten.com/200/200"
   );
+  const [refreshing, setRefreshing] = useState<boolean>(false); // New state for refresh control
   const [activeScreen, setActiveScreen] = useState("Profile");
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const storedName = await AsyncStorage.getItem("username");
-        const storedEmail = await AsyncStorage.getItem("userEmail");
-        const storedProfilePic = await AsyncStorage.getItem("profilePic");
-
-        if (storedName) setName(storedName);
-        if (storedEmail) setEmail(storedEmail);
-        if (storedProfilePic) setProfilePic(storedProfilePic);
-      } catch (error) {
-        console.error("Error fetching user data", error);
+  const fetchUserData = useCallback(async () => {
+    try {
+      const storedName = await AsyncStorage.getItem("username");
+      const storedEmail = await AsyncStorage.getItem("userEmail");
+      const response = await axios.put(
+        `${BASE_URL}profile/get-profile-picture`,
+        {
+          email: storedEmail,
+        }
+      );
+      if (response.status === 200) {
+        const link = response.data.link;
+        await AsyncStorage.setItem("profilePic", link);
+        setProfilePic(link);
       }
-    };
-    fetchUserData();
+      if (storedName) setName(storedName);
+      if (storedEmail) setEmail(storedEmail);
+    } catch (error) {
+      console.error("Error fetching user data", error);
+    } finally {
+      setRefreshing(false); // Stop refreshing
+    }
   }, []);
 
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchUserData();
+  };
+
   const handleEditProfile = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if(!permissionResult.granted) {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
       Alert.alert("Permission required", "Please grant access to photos.");
       return;
     }
@@ -55,17 +74,18 @@ const ProfileScreen: React.FC = () => {
       aspect: [1, 1],
       quality: 1,
     });
-    if(!pickerResult.canceled) {
+    if (!pickerResult.canceled) {
       const newProfilePic = pickerResult.assets[0].uri;
       setProfilePic(newProfilePic);
       try {
         const token = await AsyncStorage.getItem("token");
         const storedEmail = await AsyncStorage.getItem("userEmail");
-        const response = await axios.put(`${BASE_URL}profile/update-profile-pic`, 
+        const response = await axios.put(
+          `${BASE_URL}profile/update-profile-pic`,
           { email: storedEmail, profilePic: newProfilePic },
-          { headers: { Authorization: `Bearer ${token}` }},
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        if(response.status === 200) {
+        if (response.status === 200) {
           Alert.alert("Success", "Profile picture updated successfully");
           await AsyncStorage.setItem("profilePic", newProfilePic);
         }
@@ -88,7 +108,12 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+      >
         <View style={styles.profileHeader}>
           <Image source={{ uri: profilePic }} style={styles.profileImage} />
           <TouchableOpacity style={styles.editIcon} onPress={handleEditProfile}>

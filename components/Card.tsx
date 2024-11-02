@@ -16,7 +16,7 @@ const FileCard = ({ driveLink, year, semester, subject, _id }: FileCardProps) =>
 
     return (
       <TouchableOpacity style={styles.card} onPress={handleLinkPress}>
-        <Text style={styles.link}>Drive Link: {driveLink}</Text>
+        <Text style={styles.link}>{driveLink}</Text>
         <Text style={styles.detail}>Semester: {semester}</Text>
         <Text style={styles.detail}>Subject: {subject}</Text>
         <Text style={styles.detail}>Year: {year}</Text>
