@@ -7,6 +7,7 @@ import AddFile from "./screens/AddFile";
 import UploadedFilesScreen from "./screens/HomeScreen";
 import OTP from "./screens/OTP";
 import ProfileScreen from "./screens/ProfileScreen";
+import ProfileUploadScreen from "./screens/ProfileUploadScreen";
 const Stack = createNativeStackNavigator();
 const App: React.FC = () => {
   return (
@@ -45,6 +46,11 @@ const App: React.FC = () => {
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ProfileUploadScreen"
+          component={ProfileUploadScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

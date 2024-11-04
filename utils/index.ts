@@ -7,9 +7,12 @@ export type RootStackParamList = {
     SeeFiles: { user: { name: string | null; email: string | null; profilePic: string } };
     AddFile: { user: any };
     Profile: undefined;
+    ProfileUploadScreen: undefined;
+    Home: undefined;
 };
 export type OTPScreenRouteProp = RouteProp<RootStackParamList, "OTP">;
 export type OTPScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "OTP">;
+export type ProfileUploadScreenProp = NativeStackNavigationProp<RootStackParamList, "ProfileUploadScreen">;
 export interface OTPScreenProps {
     route: OTPScreenRouteProp;
     navigation: OTPScreenNavigationProp;
@@ -32,4 +35,7 @@ export interface FileCardProps {
     year: string;
     subject: string;
     _id: string;
+}
+export interface ProfileUploadScreenProps {
+    navigation: ProfileUploadScreenProp;
 }

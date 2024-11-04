@@ -23,9 +23,10 @@ const OTP: React.FC<OTPScreenProps> = ({ route, navigation }) => {
         password,
       });
       const { token, user } = response.data;
-      await AsyncStorage.setItem("token", token);
       Alert.alert("Verification successful", "User registered success");
-      navigation.navigate("SeeFiles", { user });
+      await AsyncStorage.setItem("token", token);
+      await AsyncStorage.setItem("userEmail", email);
+      navigation.navigate("ProfileUploadScreen");
     } catch (error) {
       console.error("OTP verification error.", error);
       Alert.alert("Verification failed", "Invalid OTP or OTP expired");
