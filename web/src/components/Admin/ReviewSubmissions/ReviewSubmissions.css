@@ -1,0 +1,52 @@
+.review-portal {
+  text-align: center;
+}
+.assignment-review {
+  max-width: 1000px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+.assignment-review h2 {
+  margin-bottom: 20px;
+}
+.assignment-review table {
+  border-collapse: collapse;
+}
+.table-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.assignment-review th,
+.assignment-review td {
+  padding: 10px;
+  border: 0px solid #ddd;
+  text-align: left;
+}
+.view-details-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.view-details-button:hover {
+  background-color: #0056b3;
+}
+@media (max-width: 768px) {
+  .table-div {
+    width: 100%;
+  }
+  .assignment-review table {
+    font-size: 14px;
+  }
+  .view-details-button {
+    padding: 6px 10px;
+  }
+}

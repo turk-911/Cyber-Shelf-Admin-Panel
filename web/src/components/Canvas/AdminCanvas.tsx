@@ -3,8 +3,8 @@ const SpaceCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const canvas = canvasRef.current!;
-    if (canvas === null) return;
-    const ctx = canvas.getContext("2d")!;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -16,20 +16,26 @@ const SpaceCanvas: React.FC = () => {
       twinkleSpeed: number;
     }
     let stars: Star[] = [];
-    function createStars(count: number) {
+    const createStars = (count: number) => {
+      stars = [];
       for (let i = 0; i < count; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
         const radius = Math.random() * 1.5 + 0.5;
         const opacity = Math.random();
         const twinkleSpeed = Math.random() * 0.02 + 0.01;
-
         stars.push({ x, y, radius, opacity, twinkleSpeed });
       }
-    }
-    function animateStars() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    };
+    const createBackground = () => {
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, "#000015");
+      gradient.addColorStop(1, "#00003b"); 
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
+    const animateStars = () => {
+      createBackground();
       stars.forEach((star) => {
         star.opacity += star.twinkleSpeed;
         if (star.opacity > 1 || star.opacity < 0) {
@@ -40,24 +46,32 @@ const SpaceCanvas: React.FC = () => {
         ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
         ctx.fill();
       });
-
       requestAnimationFrame(animateStars);
-    }
-    createStars(200);
-    animateStars();
+    };
+    createStars(200); 
+    animateStars(); 
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      stars = []; 
-      createStars(200); 
+      createStars(200);
     };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  return <canvas ref={canvasRef} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        zIndex: -1,
+      }}
+    />
+  );
 };
-
 export default SpaceCanvas;

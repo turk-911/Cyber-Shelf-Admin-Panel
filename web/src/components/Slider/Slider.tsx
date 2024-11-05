@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import "./Slider.css";
+import "./Slider.css"; 
+
 const cardData = [
   {
     id: 1,
@@ -12,22 +13,22 @@ const cardData = [
   { id: 5, title: "Never fell short in attendance", description: "" },
 ];
 const Slider: React.FC = () => {
-  const slideRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const slider = slideRef.current;
-    if (!slider) return;
-    const handleScroll = () => {
-      if (slider.scrollLeft >= slider.scrollWidth / 2) slider.scrollLeft = 0;
-    };
-    const scrollInterval = setInterval(() => {
-      if (slider) slider.scrollLeft += 1;
-    }, 10);
-    slider.addEventListener("scroll", handleScroll);
-    return () => {
-      clearInterval(scrollInterval);
-      slider.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    const slideRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        const slider = slideRef.current;
+        if(!slider) return;
+        const handleScroll = () => {
+            if(slider.scrollLeft >= slider.scrollWidth / 2) slider.scrollLeft = 0;
+        };
+        const scrollInterval = setInterval(() => {
+            if(slider) slider.scrollLeft += 1;
+        }, 10);
+        slider.addEventListener('scroll', handleScroll);
+        return () => {
+            clearInterval(scrollInterval);
+            slider.removeEventListener('scroll', handleScroll);
+        };
+    }, [])
   return (
     <div className="slider-container">
       <div className="slider-wrapper">

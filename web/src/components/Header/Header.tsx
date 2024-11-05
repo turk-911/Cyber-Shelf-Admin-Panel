@@ -8,20 +8,18 @@ const Header: React.FC = () => {
     setIsOpen(!isOpen);
   };
   const handleLogin = () => {
-    navigate("/login");
-  };
+    navigate('/login');
+  }
   return (
     <div className="top-div">
       <header className="navbar">
-        <div className="navbar-logo">PrepArchives 🚀</div>
+        <div className="navbar-logo">Cyber Shelf Admin</div>
         <div className="hamburger" onClick={toggleMenu}>
           &#9776;
         </div>
         <nav className={`nav-links ${isOpen ? "open" : ""}`}>
-          <a href="#home">Home</a>
-          <a href="#about">About</a>
           <button className="header-button" onClick={handleLogin}>
-            Get Started
+            Login
           </button>
         </nav>
       </header>
