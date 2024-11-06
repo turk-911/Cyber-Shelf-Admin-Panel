@@ -1,78 +1,74 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import FileCard from "../../File Card/Card";
+import { File } from "../../../../../utils";
 import "./ReviewSubmissions.css";
-interface Assignment {
-  id: number;
-  title: string;
-  studentName: string;
-  submissionDate: string;
-  status: string;
-}
-const ReviewSubmissions: React.FC = () => {
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const [checked, setChecked] = useState<boolean>(false);
-  const fetchAssignments = async () => {
-    const mockAssignments: Assignment[] = [
-      {
-        id: 1,
-        title: "Assignment 1",
-        studentName: "Arijit Singh",
-        submissionDate: "2024-09-10",
-        status: "Pending",
-      },
-      {
-        id: 2,
-        title: "Assignment 2",
-        studentName: "Jamie Smith",
-        submissionDate: "2024-09-11",
-        status: "Pending",
-      },
-    ];
-    setAssignments(mockAssignments);
+import { BASE_URL } from "../../../utils";
+import { useNavigate } from "react-router-dom";
+const UploadedFilesScreen: React.FC = () => {
+  const [files, setFiles] = useState<File[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [activeScreen, setActiveScreen] = useState("Home");
+  const navigate = useNavigate();
+
+  const fetchFiles = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const userEmail = localStorage.getItem("userEmail");
+      if (!userEmail) {
+        console.log("No email found in local storage");
+        return;
+      }
+      const response = await axios.get(
+        `${BASE_URL}/uploads/get-all-files/${userEmail}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setFiles(response.data.uploadedFiles);
+    } catch (error) {
+      console.error("Error fetching files", error);
+      alert("Unable to fetch files");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchAssignments();
+    fetchFiles();
   }, []);
 
+  const handleNavigation = (screen: string) => {
+    setActiveScreen(screen);
+    if (screen === "Home") return;
+    navigate(`/${screen.toLowerCase()}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="loader">
+        <p>Loading files...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="assignment-review">
-      <h2>Review the Students here 👽 </h2>
-      <div className="table-div">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Student Name</th>
-              <th>Submission Date</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {assignments.map((assignment) => (
-              <tr key={assignment.id}>
-                <td>{assignment.title}</td>
-                <td>{assignment.studentName}</td>
-                <td>{assignment.submissionDate}</td>
-                <td>
-                  {checked
-                    ? (assignment.status = "Checked")
-                    : (assignment.status = "Pending")}
-                </td>
-                <td>
-                  <button
-                    className="view-details-button"
-                    onClick={() => setChecked(!checked)}
-                  >
-                    View Details
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="uploaded-files-container">
+      <div className="files-list">
+        {files.map((file) => (
+          <FileCard
+            key={file._id.toString()}
+            driveLink={file.driveLink}
+            semester={file.semester}
+            subject={file.subject}
+            year={file.year}
+          />
+        ))}
       </div>
     </div>
   );
 };
-export default ReviewSubmissions;
+
+export default UploadedFilesScreen;

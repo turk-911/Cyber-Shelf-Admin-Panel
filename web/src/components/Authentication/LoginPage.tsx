@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
                 required
               />
             </div>
-            <button type="submit" className="auth-button" onClick={handleClick}>
+            <button type="button" className="auth-button" onClick={handleClick}>
               Login 🚀
             </button>
           </form>

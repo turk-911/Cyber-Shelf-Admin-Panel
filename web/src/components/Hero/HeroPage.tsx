@@ -15,12 +15,15 @@ const HeroPage: React.FC = () => {
       <SpaceCanvas />
       <Header />
       <div className="hero-section">
-        <h1 className="hero-heading">Login using College Credentials</h1>
-        <p className="hero-tagline">Uploads for the Cyber Shelf just got easier </p>
+        <h1 className="hero-heading">
+          Admin Uploads just got easier
+        </h1>
+        <p className="hero-tagline">Login using College Credentials </p>
         <button onClick={handlePress} className="header-button hero-button">
           Start uploading
         </button>
       </div>
+
       <Slider />
     </div>
   );

@@ -1,0 +1,28 @@
+.file-card {
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.file-card:hover {
+    transform: translateY(-2px);
+}
+.file-link {
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 5px;
+    display: block;
+    word-break: break-all;
+}
+.file-link:hover {
+    text-decoration: none;
+}
+.file-detail {
+    font-size: 14px;
+    color: #666;
+    margin: 2px 0;
+}

@@ -4,11 +4,18 @@ import AssignmentReview from "./ReviewSubmissions/ReviewSubmissions";
 import "./Admin.css";
 import DaylightCanvas from "../Canvas/DayLightCanvas";
 import SpaceCanvas from "../Canvas/SpaceCanvas";
+import { useNavigate } from "react-router-dom";
 const AdminPortal: React.FC = () => {
+  const navigate = useNavigate();
   const [light, setLight] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<"upload" | "review">("upload");
   const handleNavClick = (view: "upload" | "review") => {
     setCurrentView(view);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userEmail");
+    navigate("/login"); 
   };
   return (
     <div className="auth-wrapper">
@@ -16,18 +23,17 @@ const AdminPortal: React.FC = () => {
       {!light && <SpaceCanvas />}
       <div className="admin-portal">
         <header className={`admin-header ${light ? "light" : "dark-header"}`}>
-          <h1>Palace of Cosmic Guardians 🧑‍🚀</h1>
+          <h1>
+            {currentView === "review" ? "Uploaded Files" : "Add New File"}
+          </h1>
           <nav>
-            <button className="toggle-btn" onClick={() => setLight(!light)}>
-              {light && "🌝"}
-              {!light && "☀️"}
+            <button onClick={() => handleNavClick("upload")}>
+              Add New File
             </button>
-            {/* <button onClick={() => handleNavClick("upload")}>
-              Upload PDF
-            </button> */}
-            {/* <button onClick={() => handleNavClick("review")}>
-              Review Students
-            </button> */}
+            <button onClick={() => handleNavClick("review")}>
+              View Uploads
+            </button>
+            <button onClick={handleLogout}>Logout</button>
           </nav>
         </header>
         <main className={`admin-content ${light ? "light-main" : "dark-main"}`}>
