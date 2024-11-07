@@ -10,7 +10,7 @@ import "./App.css";
 import HeroPage from "./components/Hero/HeroPage";
 import AdminPortal from "./components/Admin/AdminPage";
 import { ThemeProvider } from "./components/Context/ThemeContext";
-import PDFUpload from "./components/Admin/PDFUpload/PDFUpload";
+import OTP from "./components/Authentication/OTP";
 const App: React.FC = () => {
   return (
     <ThemeProvider>
@@ -20,6 +20,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/admin" element={<AdminPortal />} />
+          <Route path="/otp" element={<OTP />} />
         </Routes>
       </Router>
     </ThemeProvider>

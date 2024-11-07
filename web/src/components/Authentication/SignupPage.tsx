@@ -22,6 +22,7 @@ const SignupPage: React.FC = () => {
         password,
       });
       if(response.status === 200) {
+        console.log(email);
         window.alert("OTP sent, please check your email for verification");
         const userPassword = password;
         const username = name;

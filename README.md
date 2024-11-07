@@ -1,4 +1,3 @@
-
 **Cyber Shelf Admin App**
 
 The Cyber Shelf Admin App is a mobile application designed to empower administrators by enabling them to upload and manage educational resources. Admins can choose the year, semester, and subject, and upload files such as notes, assignments, and study materials. The app ensures smooth navigation across different sections like Home, Add File, and Profile, with easy access to uploaded content.

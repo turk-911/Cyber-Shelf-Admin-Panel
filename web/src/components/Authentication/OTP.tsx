@@ -5,7 +5,7 @@ import "./Auth.css";
 import axios from "axios";
 import { BASE_URL } from "../../utils";
 
-const SignupPage: React.FC = () => {
+const OTP: React.FC = () => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   const handleClick = async () => {
@@ -62,4 +62,4 @@ const SignupPage: React.FC = () => {
   );
 };
 
-export default SignupPage;
+export default OTP;
