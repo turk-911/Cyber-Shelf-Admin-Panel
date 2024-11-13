@@ -11,8 +11,16 @@ const SignupScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const handleSignup = async () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@iiita\.ac\.in$/;
     if(name === "" || password === "" || email === "") {
       Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      Alert.alert(
+        "Invalid Email",
+        "Please use email provided by the institution."
+      );
       return;
     }
     try {

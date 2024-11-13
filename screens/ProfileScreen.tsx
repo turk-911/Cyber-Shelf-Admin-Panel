@@ -24,7 +24,7 @@ const ProfileScreen: React.FC = () => {
   const [profilePic, setProfilePic] = useState<string>(
     "https://placekitten.com/200/200"
   );
-  const [refreshing, setRefreshing] = useState<boolean>(false); // New state for refresh control
+  const [refreshing, setRefreshing] = useState<boolean>(false); 
   const [activeScreen, setActiveScreen] = useState("Profile");
   const navigation = useNavigation();
 
@@ -32,7 +32,7 @@ const ProfileScreen: React.FC = () => {
     try {
       const storedName = await AsyncStorage.getItem("username");
       const storedEmail = await AsyncStorage.getItem("userEmail");
-      const response = await axios.put(
+      const response = await axios.post(
         `${BASE_URL}profile/get-profile-picture`,
         {
           email: storedEmail,

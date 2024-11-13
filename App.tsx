@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./screens/LoginScreen";
@@ -8,8 +8,18 @@ import UploadedFilesScreen from "./screens/HomeScreen";
 import OTP from "./screens/OTP";
 import ProfileScreen from "./screens/ProfileScreen";
 import ProfileUploadScreen from "./screens/ProfileUploadScreen";
+import * as SplashScreen from "expo-splash-screen";
 const Stack = createNativeStackNavigator();
 const App: React.FC = () => {
+  useEffect(() => {
+    const prepareApp = async () => {
+      await SplashScreen.preventAutoHideAsync();
+      setTimeout(() => {
+        SplashScreen.hideAsync();
+      }, 2000);
+    };
+    prepareApp();
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator>

@@ -1,172 +1,205 @@
-// AddFile.js
 import React, { useState } from "react";
-import axios from "axios";
-
-const BASE_URL = "http://your-server-url.com"; // Replace with your backend URL
-
-const AddFile = () => {
-  const [selectedYear, setSelectedYear] = useState("1st");
-  const [selectedBranch, setSelectedBranch] = useState("IT");
-  const [selectedSemester, setSelectedSemester] = useState("1st");
-  const [subject, setSubject] = useState("LAL");
+import {
+  Text,
+  TextInput,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+} from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import CustomButton from "../components/CustomButton";
+import Toast from "react-native-root-toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BASE_URL } from "../utils/ip";
+const AddFile: React.FC = () => {
+  const [selectedYear, setSelectedYear] = useState<string>("1st");
+  const [selectedBranch, setSelectedBranch] = useState<string>("IT");
+  const [selectedSemester, setSelectedSemester] = useState<string>("1st");
+  const [subject, setSubject] = useState<string>("LAL");
   const [pdf, setPdf] = useState("");
-
   const handleSubmit = async () => {
     if (!subject || !pdf) {
-      alert("Please fill in all fields and provide a PDF link.");
+      Alert.alert("Error", "Please fill in all fields and select a file");
       return;
     }
-
     try {
-      const token = localStorage.getItem("token");
-      const userEmail = localStorage.getItem("userEmail");
-
-      const response = await axios.post(
-        `${BASE_URL}/uploads/add`,
-        {
+      const token = await AsyncStorage.getItem("token");
+      const userEmail = await AsyncStorage.getItem("userEmail");
+      console.log(token);
+      const response = await fetch(`${BASE_URL}uploads/add`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
           driveLink: pdf,
           semester: selectedSemester,
           year: parseInt(selectedYear[0]),
           branch: selectedBranch,
           subject,
-          userEmail,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+          userEmail: userEmail,
+        }),
+      });
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        Toast.show("Successfully uploaded!", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.CENTER,
+          backgroundColor: "green",
+          textColor: "white",
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          containerStyle: {
+            padding: 15,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: "#033471",
+            marginHorizontal: 30,
+            elevation: 5,
+            width: "90%",
           },
-        }
-      );
-
-      if (response.status === 200) {
-        alert("Successfully uploaded!");
+          textStyle: {
+            fontSize: 16,
+            fontWeight: "bold",
+            textAlign: "center",
+          },
+        });
       } else {
-        alert("Upload failed");
+        const text = await response.text();
+        console.log("Response text: ", text);
+        Alert.alert("Upload failed");
       }
     } catch (error) {
       console.error("Upload error", error);
-      alert("Error: Something went wrong. Please try again.");
+      Alert.alert("Error", "Something went wrong. Please try again");
     }
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Add File</h1>
-
-      <label style={styles.label}>Select Year</label>
-      <select
-        value={selectedYear}
-        onChange={(e) => setSelectedYear(e.target.value)}
-        style={styles.select}
+    <SafeAreaView style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
       >
-        <option value="1st">1st Year</option>
-        <option value="2nd">2nd Year</option>
-        <option value="3rd">3rd Year</option>
-        <option value="4th">4th Year</option>
-      </select>
-
-      <label style={styles.label}>Select Branch</label>
-      <select
-        value={selectedBranch}
-        onChange={(e) => setSelectedBranch(e.target.value)}
-        style={styles.select}
-      >
-        <option value="IT">IT</option>
-        <option value="IT-BIn">IT-BIn</option>
-        <option value="ECE">ECE</option>
-      </select>
-
-      <label style={styles.label}>Select Semester</label>
-      <select
-        value={selectedSemester}
-        onChange={(e) => setSelectedSemester(e.target.value)}
-        style={styles.select}
-      >
-        <option value="1st">1st Semester</option>
-        <option value="2nd">2nd Semester</option>
-        <option value="3rd">3rd Semester</option>
-        <option value="4th">4th Semester</option>
-        <option value="5th">5th Semester</option>
-        <option value="6th">6th Semester</option>
-        <option value="7th">7th Semester</option>
-        <option value="8th">8th Semester</option>
-      </select>
-
-      <label style={styles.label}>Subject</label>
-      <input
-        type="text"
-        placeholder="Enter subject"
-        value={subject}
-        onChange={(e) => setSubject(e.target.value)}
-        style={styles.input}
-      />
-
-      <label style={styles.label}>Google Drive Link</label>
-      <input
-        type="text"
-        placeholder="Paste a Google Drive link here"
-        value={pdf}
-        onChange={(e) => setPdf(e.target.value)}
-        style={styles.input}
-      />
-
-      <button onClick={handleSubmit} style={styles.button}>
-        Submit
-      </button>
-    </div>
+        <ScrollView>
+          <Text style={styles.title}>Add File</Text>
+          <Text style={styles.label}>Select Year</Text>
+          <Picker
+            selectedValue={selectedYear}
+            onValueChange={(itemValue) => setSelectedYear(itemValue)}
+            itemStyle={styles.itemStyle}
+            style={styles.picker}
+          >
+            <Picker.Item label="1st Year" value="1st" />
+            <Picker.Item label="2nd Year" value="2nd" />
+            <Picker.Item label="3rd Year" value="3rd" />
+            <Picker.Item label="4th Year" value="4th" />
+          </Picker>
+          <Text style={styles.label}>Select Branch</Text>
+          <Picker
+            selectedValue={selectedBranch}
+            onValueChange={(itemValue) => setSelectedBranch(itemValue)}
+            style={styles.picker}
+            itemStyle={styles.itemStyle}
+          >
+            <Picker.Item label="IT" value="IT" />
+            <Picker.Item label="IT-BIn" value="IT-BIn" />
+            <Picker.Item label="ECE" value="ECE" />
+          </Picker>
+          <Text style={styles.label}>Select Semester</Text>
+          <Picker
+            selectedValue={selectedSemester}
+            onValueChange={(itemValue) => setSelectedSemester(itemValue)}
+            style={styles.picker}
+            itemStyle={styles.itemStyle}
+          >
+            <Picker.Item label="1st Semester" value="1st" />
+            <Picker.Item label="2nd Semester" value="2nd" />
+            <Picker.Item label="3rd Semester" value="3rd" />
+            <Picker.Item label="4th Semester" value="4th" />
+            <Picker.Item label="5th Semester" value="5th" />
+            <Picker.Item label="6th Semester" value="6th" />
+            <Picker.Item label="7th Semester" value="7th" />
+            <Picker.Item label="8th Semester" value="8th" />
+          </Picker>
+          <Text style={styles.label}>Subject</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter subject"
+            value={subject}
+            onChangeText={setSubject}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Paste a Google Drive link here"
+            value={pdf}
+            onChangeText={setPdf}
+          />
+          <CustomButton title="Submit" onPress={handleSubmit} color="#033471" />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
-
-const styles = {
+const styles = StyleSheet.create({
   container: {
-    maxWidth: "500px",
-    margin: "auto",
-    padding: "20px",
+    flex: 1,
+    padding: 20,
     backgroundColor: "#f5f5f5",
-    borderRadius: "10px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   },
   title: {
-    fontSize: "24px",
+    fontSize: 26,
+    fontWeight: "bold",
     textAlign: "center",
-    marginBottom: "20px",
+    marginBottom: 30,
     color: "#033471",
   },
   label: {
-    display: "block",
-    fontSize: "16px",
-    marginBottom: "5px",
+    fontSize: 18,
+    marginVertical: 12,
     color: "#001632",
     fontWeight: "600",
   },
-  select: {
-    width: "100%",
-    padding: "10px",
-    marginBottom: "15px",
-    fontSize: "16px",
-    borderRadius: "5px",
-    border: "1px solid #001632",
+  picker: {
+    borderWidth: 1,
+    borderColor: "#001632",
+    borderRadius: 8,
+    backgroundColor: "#ffffff",
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   input: {
     width: "100%",
-    padding: "10px",
-    fontSize: "16px",
-    marginBottom: "15px",
-    borderRadius: "5px",
-    border: "1px solid #001632",
+    padding: 15,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#001632",
+    borderRadius: 8,
+    backgroundColor: "#ffffff",
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
-  button: {
-    width: "100%",
-    padding: "15px",
-    fontSize: "16px",
-    color: "#fff",
-    backgroundColor: "#033471",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontWeight: "bold",
+  itemStyle: {
+    color: "#001632",
+    backgroundColor: "#ffffff",
   },
-};
-
+});
 export default AddFile;
