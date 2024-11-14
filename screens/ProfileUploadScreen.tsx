@@ -3,7 +3,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Button, Image, StyleSheet, Text, View } from "react-native";
 import { ProfileUploadScreenProps } from "../utils";
 const ProfileUploadScreen: React.FC<ProfileUploadScreenProps> = ({ navigation }) => {
-  const [image, setImage] = useState<string>("https://placekitten.com/200/200");
+  const [image, setImage] = useState<string>("https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png");
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,

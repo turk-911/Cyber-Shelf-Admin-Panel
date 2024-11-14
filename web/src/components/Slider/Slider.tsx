@@ -2,15 +2,11 @@ import React, { useEffect, useRef } from "react";
 import "./Slider.css"; 
 
 const cardData = [
-  {
-    id: 1,
-    title: "One on one doubt solving",
-    img: "../../../public/image1.svg",
-  },
-  { id: 2, title: "All resources at one place", description: "" },
-  { id: 3, title: "See your grades on spot", description: "" },
-  { id: 4, title: "Excel in college Academics", description: "" },
-  { id: 5, title: "Never fell short in attendance", description: "" },
+  { id: 1, title: "Uploads got easier" },
+  { id: 2, title: "Direct Admin communication", description: "" },
+  { id: 3, title: "Upload subject material", description: "" },
+  { id: 4, title: "Evaluation (coming soon)", description: "" },
+  { id: 5, title: "CyberShelf Admin", description: "" },
 ];
 const Slider: React.FC = () => {
     const slideRef = useRef<HTMLDivElement>(null);
