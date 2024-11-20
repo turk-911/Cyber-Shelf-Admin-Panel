@@ -35,19 +35,20 @@ const AddFile: React.FC = () => {
           },
         }
       );
-      if (response.status === 200) {
-        alert("Successfully uploaded!"); 
+      if (response.status === 200 || response.status === 201) {
+        alert("Successfully uploaded!");
         const docRef = doc(db, "Subjects", "1_LAL");
         await updateDoc(docRef, {
           Material: arrayUnion({
             "Content URL": pdf,
             Title: subject,
-            id: `${selectedSemester}-${selectedYear[0]}-${selectedBranch}-${Date.now()}`,
+            id: `${selectedSemester}-${
+              selectedYear[0]
+            }-${selectedBranch}-${Date.now()}`,
           }),
         });
         alert("Successfully updated to firestore");
-      }
-      else alert("Upload failed");
+      } else alert("Upload failed");
     } catch (error) {
       console.error("Upload error", error);
       alert("Error: Something went wrong. Please try again.");
