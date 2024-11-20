@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   ScrollView,
   RefreshControl,
+  Image,
 } from "react-native";
 import FileCard from "../components/Card";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -91,6 +92,14 @@ const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       >
         <View style={styles.container}>
           <Text style={styles.title}>Uploaded Files</Text>
+          {files.length === 0 ? (
+            <View>
+              <Text style={styles.title}>No files to show at the moment.</Text>
+              <Image source={{ uri: "../assets/IMG_9019.HEIC"}} style={{ width: "40px", height: "50px"}} />
+            </View>
+          ) : (
+            <Text></Text>
+          )}
           {files.map((file) => (
             <FileCard
               key={file._id.toString()}

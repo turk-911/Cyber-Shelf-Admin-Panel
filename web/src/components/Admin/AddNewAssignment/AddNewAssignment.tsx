@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../../utils";
+import db from "../../../firebase";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import "./AddNewAssignment.css"
 const AddFile: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState("1st");
@@ -33,7 +35,18 @@ const AddFile: React.FC = () => {
           },
         }
       );
-      if (response.status === 200) alert("Successfully uploaded!"); 
+      if (response.status === 200) {
+        alert("Successfully uploaded!"); 
+        const docRef = doc(db, "Subjects", "1_LAL");
+        await updateDoc(docRef, {
+          Material: arrayUnion({
+            "Content URL": pdf,
+            Title: subject,
+            id: `${selectedSemester}-${selectedYear[0]}-${selectedBranch}-${Date.now()}`,
+          }),
+        });
+        alert("Successfully updated to firestore");
+      }
       else alert("Upload failed");
     } catch (error) {
       console.error("Upload error", error);

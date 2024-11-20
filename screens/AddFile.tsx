@@ -20,6 +20,7 @@ const AddFile: React.FC = () => {
   const [selectedSemester, setSelectedSemester] = useState<string>("1st");
   const [subject, setSubject] = useState<string>("LAL");
   const [pdf, setPdf] = useState("");
+  const [type, setType] = useState("");
   const handleSubmit = async () => {
     if (!subject || !pdf) {
       Alert.alert("Error", "Please fill in all fields and select a file");
@@ -129,6 +130,17 @@ const AddFile: React.FC = () => {
             <Picker.Item label="6th Semester" value="6th" />
             <Picker.Item label="7th Semester" value="7th" />
             <Picker.Item label="8th Semester" value="8th" />
+          </Picker>
+          <Text style={styles.label}>Select type:</Text>
+          <Picker
+            selectedValue={type}
+            onValueChange={(itemValue) => setType(itemValue)}
+            style={styles.picker}
+            itemStyle={styles.itemStyle}
+          >
+            <Picker.Item label="Material" value="IT" />
+            <Picker.Item label="Moderators" value="IT-BIn" />
+            <Picker.Item label="Question Paper" value="ECE" />
           </Picker>
           <Text style={styles.label}>Subject</Text>
           <TextInput
