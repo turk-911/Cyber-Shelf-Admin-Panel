@@ -1,7 +1,6 @@
-import { initializeApp } from "@react-native-firebase/app";
-import { FIREBASE_API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID } from "@env";
-import firestore from "@react-native-firebase/firestore";
-
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { FIREBASE_API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID } from "credentials";
 const firebaseConfig = {
     apiKey: FIREBASE_API_KEY,
     authDomain: AUTH_DOMAIN,
@@ -12,6 +11,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = firestore();
+const db = getFirestore(app);
 
-export { db };
+export { app, db };

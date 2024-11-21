@@ -15,6 +15,7 @@ import Toast from "react-native-root-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "../utils/ip";
 import { db } from "../utils/firebase";
+import { arrayUnion, doc, setDoc } from "firebase/firestore";
 import firestore from "@react-native-firebase/firestore"
 const AddFile: React.FC = () => { 
   const [selectedYear, setSelectedYear] = useState<string>("1st");
@@ -48,19 +49,20 @@ const AddFile: React.FC = () => {
         }),
       });
       if (response.status === 200 || response.status === 201) {
-        const docRef = db.collection("Subjects").doc("1_LAL");
-
-        await docRef.update({
-          Materials: firestore.FieldValue.arrayUnion({
-            "Content URL": pdf,
-            Title: subject,
-            id: `${selectedSemester}-${
-              selectedYear[0]
-            }-${selectedBranch}-${Date.now()}`,
-          }),
-        });
-
-        Alert.alert("Success", "Uploaded to Firestore");
+        try {
+          const docRef = doc(db, "Subjects", "1_LAL");
+          await setDoc(docRef, {
+            Materials: arrayUnion({
+              "Content URL": pdf,
+              Title: subject,
+              id: `${selectedSemester}-${
+                selectedYear[0]
+              }-${selectedBranch}-${Date.now()}`,
+            }),
+          });
+        } catch (error) {
+          console.error("Error adding doc", error);
+        }
       }
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
