@@ -14,7 +14,9 @@ import CustomButton from "../components/CustomButton";
 import Toast from "react-native-root-toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "../utils/ip";
-const AddFile: React.FC = () => {
+import { db } from "../utils/firebase";
+import firestore from "@react-native-firebase/firestore"
+const AddFile: React.FC = () => { 
   const [selectedYear, setSelectedYear] = useState<string>("1st");
   const [selectedBranch, setSelectedBranch] = useState<string>("IT");
   const [selectedSemester, setSelectedSemester] = useState<string>("1st");
@@ -45,6 +47,21 @@ const AddFile: React.FC = () => {
           userEmail: userEmail,
         }),
       });
+      if (response.status === 200 || response.status === 201) {
+        const docRef = db.collection("Subjects").doc("1_LAL");
+
+        await docRef.update({
+          Materials: firestore.FieldValue.arrayUnion({
+            "Content URL": pdf,
+            Title: subject,
+            id: `${selectedSemester}-${
+              selectedYear[0]
+            }-${selectedBranch}-${Date.now()}`,
+          }),
+        });
+
+        Alert.alert("Success", "Uploaded to Firestore");
+      }
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
@@ -72,6 +89,7 @@ const AddFile: React.FC = () => {
             textAlign: "center",
           },
         });
+
       } else {
         const text = await response.text();
         console.log("Response text: ", text);

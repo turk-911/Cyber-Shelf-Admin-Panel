@@ -10,21 +10,24 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.0.0",
+    "@react-native-firebase/app": "^21.6.0",
+    "@react-native-firebase/firestore": "^21.6.0",
     "@react-native-picker/picker": "^2.7.7",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "axios": "^1.7.7",
     "expo": "~51.0.28",
     "expo-document-picker": "~12.0.2",
+    "expo-image-picker": "~15.0.7",
+    "expo-splash-screen": "~0.27.7",
     "expo-status-bar": "~1.12.1",
     "nodemailer": "^6.9.15",
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-document-picker": "^9.3.1",
+    "react-native-dotenv": "^3.4.11",
     "react-native-root-toast": "^3.6.0",
-    "react-native-vector-icons": "^10.2.0",
-    "expo-image-picker": "~15.0.7",
-    "expo-splash-screen": "~0.27.7"
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
