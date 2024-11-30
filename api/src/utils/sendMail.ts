@@ -17,3 +17,12 @@ export const sendOtpMail = async (email: string, otp: string) => {
     };
     await transporter.sendMail(mailOptions);
 };
+export const sendVerificationMail = async (email: string, name: string) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Verification Mail",
+        text: `Hi ${name}, Welcome to cybershelf admin app! Uploads just got easier and faster. Enjoy your experience with us.`
+    }
+    await transporter.sendMail(mailOptions);
+}
