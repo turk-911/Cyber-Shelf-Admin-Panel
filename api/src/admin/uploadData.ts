@@ -1,5 +1,5 @@
 import { db } from "../utils/firebase";
-import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
 import { books, links, material, moderators, quespaper } from "../types/subject_data";
 
 export const uploadData = async (
@@ -45,7 +45,14 @@ export const uploadData = async (
       }
     }
     else{
-      console.log(`Document ${docId} does not exist.`);
+        await setDoc(docRef, {
+            "Important Links": importantLinks,
+            "MODERATORS": moderators,
+            "Material": material,
+            "QuestionPapers": ques,
+            "Recommeneded Books": book,
+        });
+        console.log(`Document ${docId} created successfully with initial data.`);
     }
   }
   catch(error){
