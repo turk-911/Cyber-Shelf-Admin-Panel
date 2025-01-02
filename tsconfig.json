@@ -7,7 +7,14 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./declarations.d.ts"],
+    "baseUrl": "./",
+    "paths": {
+      "@env": ["./declarations.d.ts"]
+    }
   },
   "exclude": [
     "node_modules",

@@ -33,3 +33,9 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+.env
+
+# credentials
+credentials.ts
+
+utils/ip.ts

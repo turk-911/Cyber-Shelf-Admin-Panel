@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../models/User";
 import { createError } from "../utils/error";
 import Otp from "../models/Otp";
-import { sendOtpMail } from "../utils/sendMail";
+import { sendOtpMail, sendVerificationMail } from "../utils/sendMail";
 dotenv.config();
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -52,6 +52,7 @@ export const verifyOtpAndRegister = async (req: Request, res: Response, next: Ne
             const token = jwt.sign({ id: createdUser._id }, process.env.JWT_SECRET as string, { expiresIn: "30d" });
             await Otp.deleteOne({ email });
             res.status(200).json({ token, user, userEmail, message: "Registration successful" });
+            sendVerificationMail(email, name);
         }
         else return next(createError(400, "Incorrect otp. Please try again"));
     } catch (error) {

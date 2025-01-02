@@ -83,24 +83,25 @@ const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     );
   }
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Uploaded Files</Text>
+      </View>
+
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={styles.scrollContent}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.container}>
-          <Text style={styles.title}>Uploaded Files</Text>
-          {files.length === 0 ? (
-            <View>
-              <Text style={styles.title}>No files to show at the moment.</Text>
-              <Image source={{ uri: "../assets/IMG_9019.HEIC"}} style={{ width: "40px", height: "50px"}} />
-            </View>
-          ) : (
-            <Text></Text>
-          )}
-          {files.map((file) => (
+        {files.length === 0 ? (
+          <View>
+            <Text style={styles.title}>
+              No files to show at the moment.
+            </Text>
+          </View>
+        ) : (
+          files.map((file) => (
             <FileCard
               key={file._id.toString()}
               driveLink={file.driveLink}
@@ -108,8 +109,8 @@ const UploadedFilesScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               subject={file.subject}
               year={file.year}
             />
-          ))}
-        </View>
+          ))
+        )}
       </ScrollView>
       <View style={styles.footer}>
         <TouchableOpacity
@@ -177,6 +178,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: "#f5f5f5",
+  },
+  header: {
+    padding: 10,
+    backgroundColor: "#f5f5f5",
+    alignItems: "center", 
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  scrollContent: {
+    padding: 10,
   },
   title: {
     fontSize: 24,
